@@ -4,6 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/compose-model-1656362905405.xml" value="0.4624155405405405" />
+        <entry key="app/src/main/res/drawable/round_arrow_back_20.xml" value="0.2485" />
+        <entry key="app/src/main/res/drawable/round_arrow_back_24.xml" value="0.2485" />
+        <entry key="app/src/main/res/drawable/round_close_20.xml" value="0.2485" />
+        <entry key="app/src/main/res/drawable/round_close_24.xml" value="0.2485" />
       </map>
     </option>
   </component>
