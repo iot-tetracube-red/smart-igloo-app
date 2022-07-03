@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "red.tetracube.smartigloo.settings";
+option java_multiple_files = true;
+
+message SmartIglooSettings {
+  repeated PairedNest connected_nests = 2;
+}
+
+message PairedNest {
+  string api_base_url = 1;
+  string alias = 2;
+  string username = 3;
+  string auth_token = 4;
+  bool current_server = 5;
+  string nest_id = 6;
+}
