@@ -24,6 +24,7 @@ import red.tetracube.smartigloo.application.models.TopAppBarModelState
 import red.tetracube.smartigloo.definitions.RouteDefinitions
 import red.tetracube.smartigloo.igloo.home.IglooHomePage
 import red.tetracube.smartigloo.settings.core.settingsDataStore
+import red.tetracube.smartigloo.settings.pairing.HubPairingPage
 import red.tetracube.smartigloo.shared.LoaderOverlay
 
 @Composable
@@ -35,8 +36,9 @@ fun SmartIglooApplication(
 
     val navController = rememberNavController()
     val topAppBarModelState = smartIglooApplicationViewModel.topAppBarData.collectAsState().value
-    val smartIglooApplicationData = smartIglooApplicationViewModel.smartIglooApplicationData.collectAsState().value
-    
+    val smartIglooApplicationData =
+        smartIglooApplicationViewModel.smartIglooApplicationData.collectAsState().value
+
     LaunchedEffect(Unit) {
         smartIglooApplicationViewModel.loadApplicationSettings(dataStore)
     }
@@ -45,7 +47,8 @@ fun SmartIglooApplication(
         navController,
         topAppBarModelState,
         smartIglooApplicationViewModel::updateTopAppBarState,
-        smartIglooApplicationData
+        smartIglooApplicationData,
+        navController::popBackStack
     )
 }
 
@@ -55,7 +58,8 @@ fun SmartIglooApplicationView(
     navController: NavHostController,
     topAppBarState: TopAppBarModelState,
     topAppBarStateSetter: (String?, NavigationIconType?, Boolean?) -> Unit,
-    smartIglooApplicationData: SmartIglooApplicationData
+    smartIglooApplicationData: SmartIglooApplicationData,
+    onBackPressed: () -> Unit
 ) {
     SmartIglooTheme {
         Surface(
@@ -66,15 +70,16 @@ fun SmartIglooApplicationView(
                 topBar = {
                     TopAppBar(
                         topAppBarState,
-                        //onBackPressed
+                        onBackPressed
                     )
                 }
             ) {
-                 ApplicationContent(
-                     it,
-                     navController,
-                     smartIglooApplicationData
-                 )
+                ApplicationContent(
+                    it,
+                    navController,
+                    smartIglooApplicationData,
+                    topAppBarStateSetter
+                )
             }
         }
     }
@@ -83,6 +88,7 @@ fun SmartIglooApplicationView(
 @Composable
 fun TopAppBar(
     topAppBarState: TopAppBarModelState,
+    onBackPressed: () -> Unit
 ) {
     val navigationIcon = when (topAppBarState.navigationIconType) {
         NavigationIconType.BACK -> R.drawable.round_arrow_back_black_24
@@ -92,7 +98,7 @@ fun TopAppBar(
         title = { Text(topAppBarState.screenTitle ?: stringResource(id = R.string.app_name)) },
         navigationIcon = {
             if (topAppBarState.navigationIconVisible) {
-                IconButton(onClick = {/* onBackPressed()*/ }) {
+                IconButton(onClick = { onBackPressed() }) {
                     Icon(
                         painter = painterResource(id = navigationIcon),
                         contentDescription = ""
@@ -109,7 +115,8 @@ fun TopAppBar(
 fun ApplicationContent(
     innerPadding: PaddingValues,
     navHostController: NavHostController,
-    smartIglooApplicationData: SmartIglooApplicationData
+    smartIglooApplicationData: SmartIglooApplicationData,
+    appBarStateSetter: (String?, NavigationIconType?, Boolean?) -> Unit
     /*,
     cosyNestAppData: CosyNestAppViewData,
     setNavigationIconVisible: (Boolean) -> Unit,
@@ -150,14 +157,21 @@ fun ApplicationContent(
             }*/
         }
         composable(RouteDefinitions.HUB_PAIRING_SETTINGS) {
-           /* setNavigationIconVisible(true)
-            screenTitleSetter(stringResource(id = R.string.set_nest_page_title))
-            val configNestViewModel: ConfigureNestViewModel = viewModel()
-            ConfigureNestSettings(configNestViewModel, navHostController)*/
+            appBarStateSetter(
+                stringResource(id = R.string.hub_pairing),
+                NavigationIconType.BACK,
+                true
+            )
+            /*
+             val configNestViewModel: ConfigureNestViewModel = viewModel()
+             ConfigureNestSettings(configNestViewModel, navHostController)*/
+            HubPairingPage(
+                navHostController
+            )
         }
         composable(RouteDefinitions.APPLIANCE_DETAILS) {
-          //  setNavigationIconVisible(true)
-          //  screenTitleSetter(it.arguments?.getString("featureName"))
+            //  setNavigationIconVisible(true)
+            //  screenTitleSetter(it.arguments?.getString("featureName"))
             /*     val viewModel: FeatureDetailsViewModel = viewModel(
                      factory = FeatureDetailsViewModelFactory(
                          featureId = UUID.fromString(it.arguments!!.getString("featureId")!!),

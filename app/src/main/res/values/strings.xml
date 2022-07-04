@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Smart Igloo</string>
+
     <string name="no_igloo_configured_dialog_title">No hub paired</string>
     <string name="no_igloo_configured_dialog_message">Continue to proceed with hub pairing</string>
     <string name="go">Go</string>
+
+    <string name="hub_pairing">Hub pairing</string>
+    <string name="hub_pairing_address_label">Hub address</string>
+    <string name="hub_pairing_username_label">Username</string>
+    <string name="hub_pairing_password_label">Password</string>
 </resources>
