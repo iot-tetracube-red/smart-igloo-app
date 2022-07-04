@@ -14,4 +14,5 @@ message PairedNest {
   string auth_token = 4;
   bool current_server = 5;
   string nest_id = 6;
+  string web_socket_base_url = 7;
 }

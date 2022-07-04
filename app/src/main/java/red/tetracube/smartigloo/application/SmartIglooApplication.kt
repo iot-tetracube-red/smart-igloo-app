@@ -25,6 +25,7 @@ import red.tetracube.smartigloo.definitions.RouteDefinitions
 import red.tetracube.smartigloo.igloo.home.IglooHomePage
 import red.tetracube.smartigloo.settings.core.settingsDataStore
 import red.tetracube.smartigloo.settings.pairing.HubPairingPage
+import red.tetracube.smartigloo.settings.pairing.HubPairingViewModel
 import red.tetracube.smartigloo.shared.LoaderOverlay
 
 @Composable
@@ -162,10 +163,9 @@ fun ApplicationContent(
                 NavigationIconType.BACK,
                 true
             )
-            /*
-             val configNestViewModel: ConfigureNestViewModel = viewModel()
-             ConfigureNestSettings(configNestViewModel, navHostController)*/
+            val hubPairingViewModel: HubPairingViewModel = viewModel()
             HubPairingPage(
+                hubPairingViewModel,
                 navHostController
             )
         }

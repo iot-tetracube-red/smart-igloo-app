@@ -1,7 +1,8 @@
 package red.tetracube.smartigloo.definitions
 
 enum class HubPairingFields {
-    IGLOO_ADDRESS,
+    API_HUB_ADDRESS,
+    WEB_SOCKET_HUB_ADDRESS,
     USERNAME,
     PASSWORD
 }
