@@ -1,9 +1,9 @@
-package red.tetracube.smartigloo.clients.joinigloohub.payloads
+package red.tetracube.smartigloo.settings.pairing.service.payloads
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class JoinIglooHubRequest @JsonCreator constructor(
+data class HubPairingRequest @JsonCreator constructor(
     @JsonProperty("username")
     val username: String,
 

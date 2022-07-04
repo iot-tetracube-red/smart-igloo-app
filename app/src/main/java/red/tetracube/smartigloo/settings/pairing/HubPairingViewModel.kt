@@ -1,24 +1,24 @@
-package red.tetracube.smartigloo.joinigloo
+package red.tetracube.smartigloo.settings.pairing
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import red.tetracube.smartigloo.clients.ApiClient
-import red.tetracube.smartigloo.clients.joinigloohub.JoinIglooHubService
-import red.tetracube.smartigloo.clients.joinigloohub.payloads.JoinIglooHubRequest
-import red.tetracube.smartigloo.core.data.settingsDataStore
-import red.tetracube.smartigloo.definitions.HubJoinFields
+import red.tetracube.smartigloo.settings.pairing.service.HubPairingService
+import red.tetracube.smartigloo.settings.pairing.service.payloads.HubPairingRequest
+import red.tetracube.smartigloo.definitions.HubPairingFields
 import red.tetracube.smartigloo.definitions.ServiceConnectionStatus
-import red.tetracube.smartigloo.joinigloo.models.JoinIglooViewData
+import red.tetracube.smartigloo.settings.pairing.models.HubPairingViewData
 import red.tetracube.smartigloo.settings.PairedNest
+import red.tetracube.smartigloo.settings.core.settingsDataStore
 import retrofit2.awaitResponse
 import java.net.URI
 
-class JoinIglooViewModel : ViewModel() {
+class HubPairingViewModel : ViewModel() {
 
-    private val _joinIglooViewData = MutableStateFlow(JoinIglooViewData())
-    val joinIglooViewData: StateFlow<JoinIglooViewData> get() = _joinIglooViewData
+    private val _hubPairingViewData = MutableStateFlow(HubPairingViewData())
+    val hubPairingViewData: StateFlow<HubPairingViewData> get() = _hubPairingViewData
 
     private val _serviceConnectionStatus = MutableStateFlow(ServiceConnectionStatus.IDLE)
     val serviceConnectionStatus: StateFlow<ServiceConnectionStatus> get() = _serviceConnectionStatus
@@ -26,35 +26,35 @@ class JoinIglooViewModel : ViewModel() {
     private val _submitButtonEnabled = MutableStateFlow(false)
     val submitButtonEnabled: StateFlow<Boolean> get() = _submitButtonEnabled
 
-    fun updateFormFieldsValues(value: String, field: HubJoinFields) {
+    fun updateFormFieldsValues(value: String, field: HubPairingFields) {
         when (field) {
-            HubJoinFields.IGLOO_ADDRESS -> {
-                _joinIglooViewData.value = _joinIglooViewData.value.copy(
+            HubPairingFields.IGLOO_ADDRESS -> {
+                _hubPairingViewData.value = _hubPairingViewData.value.copy(
                     nestAddress = value
                 )
             }
-            HubJoinFields.USERNAME -> {
-                _joinIglooViewData.value = _joinIglooViewData.value.copy(
+            HubPairingFields.USERNAME -> {
+                _hubPairingViewData.value = _hubPairingViewData.value.copy(
                     username = value
                 )
             }
-            HubJoinFields.PASSWORD -> {
-                _joinIglooViewData.value = _joinIglooViewData.value.copy(
+            HubPairingFields.PASSWORD -> {
+                _hubPairingViewData.value = _hubPairingViewData.value.copy(
                     password = value
                 )
             }
         }
 
-        _submitButtonEnabled.value = !_joinIglooViewData.value.password.isNullOrEmpty()
-                && !_joinIglooViewData.value.username.isNullOrEmpty()
-                && !_joinIglooViewData.value.nestAddress.isNullOrEmpty()
+        _submitButtonEnabled.value = !_hubPairingViewData.value.password.isNullOrEmpty()
+                && !_hubPairingViewData.value.username.isNullOrEmpty()
+                && !_hubPairingViewData.value.nestAddress.isNullOrEmpty()
     }
 
     suspend fun saveNest(context: Context) {
         val apiBaseURL = URI(
             "http",
             null,
-            _joinIglooViewData.value.nestAddress,
+            _hubPairingViewData.value.nestAddress,
             8080,
             null,
             null,
@@ -63,7 +63,7 @@ class JoinIglooViewModel : ViewModel() {
         val webSocketURL = URI(
             "ws",
             null,
-            _joinIglooViewData.value.nestAddress,
+            _hubPairingViewData.value.nestAddress,
             8081,
             null,
             null,
@@ -73,23 +73,23 @@ class JoinIglooViewModel : ViewModel() {
         setServiceStatus(ServiceConnectionStatus.CONNECTING)
         val apiBaseURLString = apiBaseURL.toString()
 
-        val joinIglooHubService: JoinIglooHubService = ApiClient(apiBaseURLString)
+        val hubPairingService: HubPairingService = ApiClient(apiBaseURLString)
             .retrofit
-            .create(JoinIglooHubService::class.java)
+            .create(HubPairingService::class.java)
 
         val configNestResponseBody = try {
-            val username = _joinIglooViewData.value.username!!
-            val password = _joinIglooViewData.value.password!!
-            val joinIglooHubRequest = joinIglooHubService.configureNest(
-                JoinIglooHubRequest(username, password)
+            val username = _hubPairingViewData.value.username!!
+            val password = _hubPairingViewData.value.password!!
+            val hubPairingResponse = hubPairingService.hubPairing(
+                HubPairingRequest(username, password)
             )
                 .awaitResponse()
-            if (joinIglooHubRequest.code() == 401) {
+            if (hubPairingResponse.code() == 401) {
                 setServiceStatus(ServiceConnectionStatus.UNAUTHORIZED)
                 null
             } else {
                 setServiceStatus(ServiceConnectionStatus.IDLE)
-                joinIglooHubRequest.body()
+                hubPairingResponse.body()
             }
         } catch (ex: Exception) {
             setServiceStatus(ServiceConnectionStatus.CONNECTION_ERROR)
@@ -102,7 +102,7 @@ class JoinIglooViewModel : ViewModel() {
                     PairedNest.newBuilder()
                         .setCurrentServer(true)
                         .setAlias(configNestResponseBody.nestName)
-                        .setUsername(_joinIglooViewData.value.username)
+                        .setUsername(_hubPairingViewData.value.username)
                         .setApiBaseUrl(apiBaseURLString)
                         .setAuthToken(configNestResponseBody.authenticationToken)
                         .setNestId(configNestResponseBody.nestId.toString())
@@ -113,7 +113,7 @@ class JoinIglooViewModel : ViewModel() {
         setServiceStatus(ServiceConnectionStatus.CONNECTION_SUCCESS)
     }
 
-    fun setServiceStatus(newStatus: ServiceConnectionStatus) {
+    private fun setServiceStatus(newStatus: ServiceConnectionStatus) {
         _serviceConnectionStatus.value = newStatus
     }
 

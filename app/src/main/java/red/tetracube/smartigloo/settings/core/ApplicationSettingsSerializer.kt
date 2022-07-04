@@ -1,4 +1,4 @@
-package red.tetracube.smartigloo.core.data
+package red.tetracube.smartigloo.settings.core
 
 import android.content.Context
 import androidx.datastore.core.CorruptionException
@@ -10,7 +10,7 @@ import red.tetracube.smartigloo.settings.SmartIglooSettings
 import java.io.InputStream
 import java.io.OutputStream
 
-object CosyNestSettingsAppSettingsSerializer : Serializer<SmartIglooSettings> {
+object ApplicationSettingsSerializer : Serializer<SmartIglooSettings> {
 
     override val defaultValue: SmartIglooSettings = SmartIglooSettings.getDefaultInstance()
 
@@ -30,5 +30,5 @@ object CosyNestSettingsAppSettingsSerializer : Serializer<SmartIglooSettings> {
 
 val Context.settingsDataStore: DataStore<SmartIglooSettings> by dataStore(
     fileName = "settings.pb",
-    serializer = CosyNestSettingsAppSettingsSerializer
+    serializer = ApplicationSettingsSerializer
 )

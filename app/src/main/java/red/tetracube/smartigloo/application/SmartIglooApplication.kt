@@ -21,9 +21,9 @@ import red.tetracube.smartigloo.ui.theme.SmartIglooTheme
 import red.tetracube.smartigloo.R
 import red.tetracube.smartigloo.application.models.SmartIglooApplicationData
 import red.tetracube.smartigloo.application.models.TopAppBarModelState
-import red.tetracube.smartigloo.core.data.settingsDataStore
 import red.tetracube.smartigloo.definitions.RouteDefinitions
-import red.tetracube.smartigloo.igloohomepage.IglooHomePage
+import red.tetracube.smartigloo.igloo.home.IglooHomePage
+import red.tetracube.smartigloo.settings.core.settingsDataStore
 import red.tetracube.smartigloo.shared.LoaderOverlay
 
 @Composable
@@ -131,7 +131,6 @@ fun ApplicationContent(
                 smartIglooApplicationData.applicationInitialized,
                 navHostController
             )
-               // ManageDialog(cosyNestAppData, navHostController)
 
             /*else {
                 setNavigationIconVisible(false)
@@ -150,7 +149,7 @@ fun ApplicationContent(
                 NestFeatures(nestFeaturesViewModel, navHostController)
             }*/
         }
-        composable(RouteDefinitions.JOIN_IGLOO_HUB) {
+        composable(RouteDefinitions.HUB_PAIRING_SETTINGS) {
            /* setNavigationIconVisible(true)
             screenTitleSetter(stringResource(id = R.string.set_nest_page_title))
             val configNestViewModel: ConfigureNestViewModel = viewModel()

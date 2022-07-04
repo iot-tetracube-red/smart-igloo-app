@@ -1,4 +1,4 @@
-package red.tetracube.smartigloo.igloohomepage
+package red.tetracube.smartigloo.igloo.home
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -46,7 +46,7 @@ fun ManageDialog(
             confirmStringId = R.string.go,
             dismissible = false,
             onDismiss = {
-                navHostController.navigate(RouteDefinitions.JOIN_IGLOO_HUB)
+                navHostController.navigate(RouteDefinitions.HUB_PAIRING_SETTINGS)
             }
         )
     }

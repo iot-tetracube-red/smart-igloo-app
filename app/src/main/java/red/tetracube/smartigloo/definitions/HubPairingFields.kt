@@ -1,6 +1,6 @@
 package red.tetracube.smartigloo.definitions
 
-enum class HubJoinFields {
+enum class HubPairingFields {
     IGLOO_ADDRESS,
     USERNAME,
     PASSWORD

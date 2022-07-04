@@ -1,6 +1,6 @@
-package red.tetracube.smartigloo.joinigloo.models
+package red.tetracube.smartigloo.settings.pairing.models
 
-data class JoinIglooViewData(
+data class HubPairingViewData(
     val nestAddress: String? = null,
     val username: String? = null,
     val password: String? = null,

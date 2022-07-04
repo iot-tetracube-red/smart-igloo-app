@@ -1,10 +1,10 @@
-package red.tetracube.smartigloo.clients.joinigloohub.payloads
+package red.tetracube.smartigloo.settings.pairing.service.payloads
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
-class JoinIglooHubResponse @JsonCreator constructor (
+class HubPairingResponse @JsonCreator constructor (
     @JsonProperty("igloo_id")
     val nestId: UUID,
 
