@@ -7,21 +7,23 @@ import 'package:smart_igloo_app/home_page/smart_home_page.dart';
 import 'package:smart_igloo_app/main_application/app_bar_model_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:smart_igloo_app/smart_igloo_app_settings_state/smart_igloo_app_settings_cubit.dart';
-import 'package:smart_igloo_app/smart_igloo_app_settings_state/smart_igloo_app_settings_model_state.dart';
 
-import 'app_bar_cubit.dart';
+import '../smart_igloo_application/cubit_app_bar.dart';
 
+/*
 class MainApplicationPage extends StatelessWidget {
   const MainApplicationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    BlocConsumer<SmartIglooAppSettingsCubit, SmartIglooAppSettingsModelState>(
+    */
+/*BlocConsumer<SmartIglooAppSettingsCubit, SmartIglooAppSettingsModelState>(
       listenWhen: (_, currentState) => !currentState.applicationIsInitialized,
       listener: ,
       buildWhen: (_, currentState) => currentState.applicationIsInitialized,
       builder: ,
-    )
+    )*//*
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -42,4 +44,4 @@ class MainApplicationPage extends StatelessWidget {
       body: const SmartHomePage()
     );
   }
-}
+}*/
