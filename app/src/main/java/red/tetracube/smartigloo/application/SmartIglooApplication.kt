@@ -71,6 +71,7 @@ fun SmartIglooApplicationView(
                 topBar = {
                     TopAppBar(
                         topAppBarState,
+                        smartIglooApplicationData.nestName,
                         onBackPressed
                     )
                 }
@@ -89,14 +90,18 @@ fun SmartIglooApplicationView(
 @Composable
 fun TopAppBar(
     topAppBarState: TopAppBarModelState,
+    iglooName: String?,
     onBackPressed: () -> Unit
 ) {
     val navigationIcon = when (topAppBarState.navigationIconType) {
         NavigationIconType.BACK -> R.drawable.round_arrow_back_black_24
         NavigationIconType.CLOSE -> R.drawable.round_close_black_24
     }
+
+    val effectiveTitle =
+        topAppBarState.screenTitle ?: (iglooName ?: stringResource(id = R.string.app_name))
     CenterAlignedTopAppBar(
-        title = { Text(topAppBarState.screenTitle ?: stringResource(id = R.string.app_name)) },
+        title = { Text(effectiveTitle) },
         navigationIcon = {
             if (topAppBarState.navigationIconVisible) {
                 IconButton(onClick = { onBackPressed() }) {
@@ -135,6 +140,7 @@ fun ApplicationContent(
                 LoaderOverlay()
                 return@composable
             }
+            appBarStateSetter(null, null, false)
             IglooHomePage(
                 smartIglooApplicationData.applicationInitialized,
                 navHostController

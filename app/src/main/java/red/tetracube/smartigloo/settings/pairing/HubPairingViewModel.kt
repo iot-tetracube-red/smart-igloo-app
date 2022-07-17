@@ -103,6 +103,7 @@ class HubPairingViewModel : ViewModel() {
                 hubPairingResponse.body()
             }
         } catch (ex: Exception) {
+            ex.printStackTrace()
             setServiceStatus(ServiceConnectionStatus.CONNECTION_ERROR)
             null
         } ?: return
@@ -112,12 +113,12 @@ class HubPairingViewModel : ViewModel() {
                 .addConnectedNests(
                     PairedNest.newBuilder()
                         .setCurrentServer(true)
-                        .setAlias(configNestResponseBody.nestName)
+                        .setAlias(configNestResponseBody.hubName)
                         .setUsername(username)
                         .setApiBaseUrl(apiBaseURLString)
                         .setWebSocketBaseUrl(webSocketBaseUrlString)
                         .setAuthToken(configNestResponseBody.authenticationToken)
-                        .setNestId(configNestResponseBody.nestId.toString())
+                        .setNestId(configNestResponseBody.hubId.toString())
                         .build()
                 )
                 .build()
@@ -125,8 +126,7 @@ class HubPairingViewModel : ViewModel() {
         setServiceStatus(ServiceConnectionStatus.CONNECTION_SUCCESS)
     }
 
-    private fun setServiceStatus(newStatus: ServiceConnectionStatus) {
+    fun setServiceStatus(newStatus: ServiceConnectionStatus) {
         _serviceConnectionStatus.value = newStatus
     }
-
 }

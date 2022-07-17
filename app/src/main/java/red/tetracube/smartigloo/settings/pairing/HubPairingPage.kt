@@ -19,7 +19,10 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import red.tetracube.smartigloo.R
 import red.tetracube.smartigloo.definitions.HubPairingFields
+import red.tetracube.smartigloo.definitions.ServiceConnectionStatus
 import red.tetracube.smartigloo.settings.pairing.models.HubPairingViewData
+import red.tetracube.smartigloo.shared.AlertDialogView
+import red.tetracube.smartigloo.shared.LoaderOverlay
 
 @Composable
 fun HubPairingPage(
@@ -29,9 +32,7 @@ fun HubPairingPage(
     val context = LocalContext.current
     val hubPairingViewData = hubPairingViewModel.hubPairingViewData.collectAsState().value
     val submitButtonEnabled = hubPairingViewModel.submitButtonEnabled.collectAsState().value
-    /*
-
-    val connectionStatus = viewModel.serviceConnectionStatus.collectAsState().value*/
+    val connectionStatus = hubPairingViewModel.serviceConnectionStatus.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
 
     HubPairingView(
@@ -43,21 +44,14 @@ fun HubPairingPage(
                 hubPairingViewModel.doPairing(context)
             }
         },
-    )
-
-    /*JoinIglooView(
-        configureNestDataData,
-        submitButtonEnabled,
         connectionStatus,
-        { value, field -> viewModel.updateFormFieldsValues(value, field) },
-
         {
             if (it == ServiceConnectionStatus.CONNECTION_SUCCESS) {
-                navHostController.navigate(HOME)
+                navHostController.popBackStack()
             }
-            viewModel.setServiceStatus(ServiceConnectionStatus.IDLE)
+            hubPairingViewModel.setServiceStatus(ServiceConnectionStatus.IDLE)
         }
-    )*/
+    )
 }
 
 @Composable
@@ -66,17 +60,13 @@ fun HubPairingView(
     setFieldValue: (String, HubPairingFields) -> Unit,
     submitButtonEnabled: Boolean,
     onButtonSaveTap: () -> Unit,
-/*    configureNestDataData: ConfigureNestViewData,
-
     serviceConnectionStatus: ServiceConnectionStatus,
-
-
-    onDialogDismiss: (ServiceConnectionStatus) -> Unit*/
+    onDialogDismiss: (ServiceConnectionStatus) -> Unit
 ) {
-    /*  ServiceConnectionDialog(
+      ServiceConnectionDialog(
           serviceConnectionStatus,
           onDialogDismiss
-      )*/
+      )
 
     Column(
         modifier = Modifier
@@ -161,5 +151,54 @@ fun HubPairingView(
                 Text(text = stringResource(id = R.string.hub_pairing_do_pairing_button))
             }
         }
+    }
+}
+
+@Composable
+fun ServiceConnectionDialog(
+    serviceConnectionStatus: ServiceConnectionStatus,
+    onDialogDismiss: (ServiceConnectionStatus) -> Unit
+) {
+    when (serviceConnectionStatus) {
+        ServiceConnectionStatus.CONNECTION_SUCCESS -> {
+            AlertDialogView(
+                iconId = R.drawable.round_check_circle_outline_24,
+                titleStringId = R.string.config_nest_dialog_success_title,
+                textStringId = R.string.config_nest_dialog_success_message,
+                confirmStringId = R.string.go,
+                true,
+                onDismiss = {
+                    onDialogDismiss(serviceConnectionStatus)
+                }
+            )
+        }
+        ServiceConnectionStatus.CONNECTION_ERROR -> {
+            AlertDialogView(
+                iconId = R.drawable.round_highlight_off_24,
+                titleStringId = R.string.config_nest_dialog_connection_error_title,
+                textStringId = R.string.config_nest_dialog_connection_error_message,
+                confirmStringId = R.string.go,
+                true,
+                onDismiss = {
+                    onDialogDismiss(serviceConnectionStatus)
+                }
+            )
+        }
+        ServiceConnectionStatus.UNAUTHORIZED -> {
+            AlertDialogView(
+                iconId = R.drawable.round_highlight_off_24,
+                titleStringId = R.string.config_nest_dialog_unauthorized_title,
+                textStringId = R.string.config_nest_dialog_unauthorized_message,
+                confirmStringId = R.string.go,
+                true,
+                onDismiss = {
+                    onDialogDismiss(serviceConnectionStatus)
+                }
+            )
+        }
+        ServiceConnectionStatus.CONNECTING -> {
+            LoaderOverlay()
+        }
+        else -> {}
     }
 }

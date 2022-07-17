@@ -5,11 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
 class HubPairingResponse @JsonCreator constructor (
-    @JsonProperty("igloo_id")
-    val nestId: UUID,
+    @JsonProperty("hub_id")
+    val hubId: UUID,
 
-    @JsonProperty("igloo_name")
-    val nestName: String,
+    @JsonProperty("hub_name")
+    val hubName: String,
 
     @JsonProperty("authentication_token")
     val authenticationToken: String

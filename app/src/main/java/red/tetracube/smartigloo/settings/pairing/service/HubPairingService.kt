@@ -7,6 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface HubPairingService {
-    @POST("/settings/pairing-igloo-hub")
+    @POST("/settings/hub/pair")
     fun hubPairing(@Body hubPairingRequest: HubPairingRequest): Call<HubPairingResponse>
 }

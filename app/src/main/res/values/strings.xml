@@ -11,4 +11,10 @@
     <string name="hub_pairing_username_label">Username</string>
     <string name="hub_pairing_password_label">Password</string>
     <string name="hub_pairing_do_pairing_button">Pair hub</string>
+    <string name="config_nest_dialog_success_title">Hub success</string>
+    <string name="config_nest_dialog_success_message">Pairing hub success</string>
+    <string name="config_nest_dialog_connection_error_title">Connection failed</string>
+    <string name="config_nest_dialog_connection_error_message">Connection failed to the hub</string>
+    <string name="config_nest_dialog_unauthorized_title">Unauthorized</string>
+    <string name="config_nest_dialog_unauthorized_message">Cannot access to the specified hub</string>
 </resources>
